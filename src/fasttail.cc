@@ -1,4 +1,5 @@
 #include "fasttail.h"
+#include "worker.h"
 
 using namespace Napi;
 
@@ -21,57 +22,6 @@ FastTail::FastTail(const Napi::CallbackInfo &info) : ObjectWrap(info)
     }
 
     this->logUri = info[0].As<Napi::String>().Utf8Value();
-}
-
-void FastTail::UsingMMap(Napi::Env env, Napi::Function cb, int m_target)
-{
-    int input = ::open(this->logUri.c_str(), O_RDONLY);
-    if (input < 0) {
-        Napi::TypeError::New(env, "Could not open " + this->logUri)
-            .ThrowAsJavaScriptException();
-        return;
-    }
-
-    struct ::stat infos;
-    if (::fstat(input, &infos) != 0) {
-        Napi::TypeError::New(env, "Could not stat " + this->logUri)
-            .ThrowAsJavaScriptException();
-        return;
-    }
-
-    char *base = (char *)::mmap(NULL, infos.st_size, PROT_READ, MAP_PRIVATE, input, 0);
-    if (base == MAP_FAILED) {
-        Napi::TypeError::New(env, "Could not map " + this->logUri)
-            .ThrowAsJavaScriptException();
-        return;
-    }
-
-    char const *end = base + infos.st_size;
-    char const *curr = base;
-    char const *next = std::find(curr, end, '\n');
-
-    //Skip to target
-    for (int count = m_target; count > 0 && curr != end; --count)
-    {
-        curr = next + 1;
-        next = std::find(curr, end, '\n');
-    }
-
-    //Tail file from last index
-    while (curr != end)
-    {
-        cb.MakeCallback(env.Global(), { Napi::String::New(env, std::string(curr, next))} );
-        curr = next + 1;
-
-        if(int(*curr) != 0) {
-            currentIndex++;
-            next = std::find(curr, end, '\n');
-        } else {
-            break;
-        }
-    }
-
-    ::munmap(base, infos.st_size);
 }
 
 Napi::Value FastTail::GetLogUri(const Napi::CallbackInfo &info)
@@ -113,11 +63,11 @@ Napi::Value FastTail::Tail(const Napi::CallbackInfo &info)
         return env.Null();
     }
 
-    Napi::Function lineCb = info[0].As<Napi::Function>();
-    Napi::Function eofCb = info[1].As<Napi::Function>();
+    auto lineCb = info[0].As<Napi::Function>();
+    auto eofCb = info[1].As<Napi::Function>();
 
-    this->UsingMMap(info.Env(), lineCb, 0);
-
+    Worker* wk = new Worker(this->logUri, 0, env, lineCb, eofCb);
+    wk->Queue();
     return env.Null();
 }
 

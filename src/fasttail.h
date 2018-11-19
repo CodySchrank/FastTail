@@ -21,10 +21,7 @@ public:
     FastTail(const CallbackInfo&);
     Napi::Value Tail(const CallbackInfo&);
     Napi::Value GetLogUri(const CallbackInfo&);
+    std::string logUri;
 
     static Function GetClass(Napi::Env);
-private:
-    void UsingMMap(Napi::Env env, Napi::Function cb, int m_target);
-    int currentIndex = 0;
-    std::string logUri;
 };
