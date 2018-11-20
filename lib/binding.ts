@@ -17,19 +17,19 @@ class FastTail {
         return this._addonInstance.getLogUri();
     }
 
-    public tail(index: number, lineCb: (line: string) => void, eof: (index: number) => void) {
+    public readFromIndex(index: number, lineCb: (line: string) => void, eof: (index: number) => void = () => {}) {
         return this._addonInstance.tail(index, lineCb, eof);
     }
 
-    protected start(lineCb: (line: string) => void, eof: (index: number) => void = () => {}) {
-        this.tail(0, lineCb, (index: number) => {
+    protected tail(lineCb: (line: string) => void, eof: (index: number) => void = () => {}) {
+        this.readFromIndex(0, lineCb, (index: number) => {
             eof(index);
 
             let currentIndex = index;
             let prevIndex = currentIndex;
 
             setInterval(() => {
-                this.tail(currentIndex, lineCb, (newIndex) => {
+                this.readFromIndex(currentIndex, lineCb, (newIndex) => {
                     currentIndex = newIndex;
                     if(currentIndex != prevIndex) {
                         eof(newIndex);

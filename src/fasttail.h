@@ -19,7 +19,7 @@ class FastTail : public ObjectWrap<FastTail>
 {
 public:
     FastTail(const CallbackInfo&);
-    Napi::Value Tail(const CallbackInfo&);
+    Napi::Value ReadFromIndex(const CallbackInfo&);
     Napi::Value GetLogUri(const CallbackInfo&);
     std::string logUri;
 

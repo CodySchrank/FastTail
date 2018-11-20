@@ -13,16 +13,24 @@ function testBasic()
     assert.strictEqual(fastTail.pollRate, 200, "Unexpected value returned");
 
     const lines = [];
+    let i = 0;
 
-    fastTail.start((line) => {
+    fastTail.tail((line) => {
         lines.push(line);
     }, (index) => {
         assert.strictEqual(lines.length, index, "Unexpected value returned");
+        i = index;
     })
 
     setTimeout(() => {
         fs.appendFileSync('test.txt', '\nyup');
     }, 200);
+
+    setTimeout(() => {
+        fastTail.readFromIndex(i, (line) => {
+            assert.strictEqual(line, "yup", "Unexpected value returned");
+        })
+    }, 400);
 }
 
 assert.doesNotThrow(testBasic, undefined, "testBasic threw an expection");

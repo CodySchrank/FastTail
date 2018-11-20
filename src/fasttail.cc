@@ -38,7 +38,7 @@ Napi::Value FastTail::GetLogUri(const Napi::CallbackInfo &info)
     return Napi::String::New(env, this->logUri);
 }
 
-Napi::Value FastTail::Tail(const Napi::CallbackInfo &info)
+Napi::Value FastTail::ReadFromIndex(const Napi::CallbackInfo &info)
 {
     Napi::Env env = info.Env();
 
@@ -65,7 +65,7 @@ Napi::Value FastTail::Tail(const Napi::CallbackInfo &info)
 
     if (!info[2].IsFunction())
     {
-        Napi::TypeError::New(env, "Must pass in on line callback")
+        Napi::TypeError::New(env, "Must pass in eof callback")
             .ThrowAsJavaScriptException();
         return env.Null();
     }
@@ -84,7 +84,7 @@ Napi::Function FastTail::GetClass(Napi::Env env)
 {
     return DefineClass(env, "FastTail", {
         FastTail::InstanceMethod("getLogUri", &FastTail::GetLogUri),
-        FastTail::InstanceMethod("tail", &FastTail::Tail),
+        FastTail::InstanceMethod("readFromIndex", &FastTail::ReadFromIndex),
     });
 }
 
