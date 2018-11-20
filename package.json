@@ -6,7 +6,6 @@
     "scripts": {
         "pretest": "tsc && rm -f test.txt && echo 'Hello World' >> test.txt",
         "test": "npm install && node --napi-modules --no-warnings ./test/test_binding.js",
-        "posttest": "rm test.txt"
     },
     "gypfile": true,
     "author": "Cody Schrank",
