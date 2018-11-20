@@ -2,6 +2,8 @@ const addon = require('../build/Release/fasttail-native');
 
 interface IFastTailNative
 {
+    pollRate: number;
+    tailFromEnd: boolean;
     getLogUri(): string;
     readFromIndex(index: number, lineCb: (line: string) => void, eof: (index: number) => void): void;
     tail(lineCb: (line: string) => void, eof: (index: number) => void): void;
