@@ -5,11 +5,11 @@
     },
     "scripts": {
         "pretest": "tsc",
-        "test": "node --napi-modules --no-warnings ./test/test_binding.js"
+        "test": "npm install && node --napi-modules --no-warnings ./test/test_binding.js"
     },
     "gypfile": true,
     "name": "fasttail",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Tail a file quickly",
     "author": "Cody Schrank",
     "license": "MIT",

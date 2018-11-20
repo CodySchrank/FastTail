@@ -1,7 +1,7 @@
 {
   'targets': [
     {
-      'target_name': 'fasttail-native',
+      'target_name': 'binding',
       'sources': [ 'src/fasttail.cc', 'src/worker.cc' ],
       'include_dirs': ["<!@(node -p \"require('node-addon-api').include\")"],
       'dependencies': ["<!(node -p \"require('node-addon-api').gyp\")"],

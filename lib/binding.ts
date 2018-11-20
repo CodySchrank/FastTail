@@ -1,9 +1,10 @@
-const addon = require('../build/Release/fasttail-native');
+const addon = require('../build/Release/binding');
 
 interface IFastTailNative
 {
     getLogUri(): string;
-    tail(index: number, lineCb: (line: string) => void, eof: (index: number) => void): void;
+    readFromIndex(index: number, lineCb: (line: string) => void, eof: (index: number) => void): void;
+    tail(lineCb: (line: string) => void, eof: (index: number) => void): void;
 };
 
 class FastTail {
@@ -18,7 +19,7 @@ class FastTail {
     }
 
     public readFromIndex(index: number, lineCb: (line: string) => void, eof: (index: number) => void = () => {}) {
-        return this._addonInstance.tail(index, lineCb, eof);
+        return this._addonInstance.readFromIndex(index, lineCb, eof);
     }
 
     protected tail(lineCb: (line: string) => void, eof: (index: number) => void = () => {}) {
