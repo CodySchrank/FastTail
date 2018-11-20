@@ -1,4 +1,4 @@
-const FastTail = require("../dist/binding.js");
+const FastTail = require("../lib/binding.js");
 const assert = require("assert");
 const fs = require('fs');
 
