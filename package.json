@@ -1,21 +1,22 @@
 {
+    "name": "fasttail",
+    "version": "1.1.0",
+    "description": "Tail a file quickly",
+    "repository": "https://github.com/CodySchrank/FastTail",
+    "scripts": {
+        "pretest": "tsc && rm -f test.txt && echo 'Hello World' >> test.txt",
+        "test": "npm install && node --napi-modules --no-warnings ./test/test_binding.js",
+        "posttest": "rm test.txt"
+    },
+    "gypfile": true,
+    "author": "Cody Schrank",
+    "license": "MIT",
     "main": "lib/binding.js",
     "dependencies": {
         "node-addon-api": "^1.1.0",
         "@types/node": "^7.0.22"
     },
-    "scripts": {
-        "pretest": "tsc",
-        "test": "npm install && node --napi-modules --no-warnings ./test/test_binding.js"
-    },
-    "gypfile": true,
-    "name": "fasttail",
-    "version": "1.0.6",
-    "description": "Tail a file quickly",
-    "author": "Cody Schrank",
-    "license": "MIT",
     "devDependencies": {
-        "@types/node": "^7.0.22",
         "typescript": "^2.3.3"
     }
 }

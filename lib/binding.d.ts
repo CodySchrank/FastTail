@@ -1,5 +1,6 @@
 declare class FastTail {
     pollRate: number;
+    tailFromEnd: boolean;
     constructor(logUri: string);
     getLogUri(): string;
     readFromIndex(index: number, lineCb: (line: string) => void, eof?: (index: number) => void): void;

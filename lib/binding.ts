@@ -1,4 +1,4 @@
-const addon = require('../build/Release/binding');
+const addon = require('../build/Release/fasttail-native');
 
 interface IFastTailNative
 {
@@ -9,6 +9,7 @@ interface IFastTailNative
 
 class FastTail {
     public pollRate: number = 100;
+    public tailFromEnd = true;
 
     constructor(logUri: string) {
         this._addonInstance = new addon.FastTail(logUri)
@@ -23,7 +24,12 @@ class FastTail {
     }
 
     protected tail(lineCb: (line: string) => void, eof: (index: number) => void = () => {}) {
-        this.readFromIndex(0, lineCb, (index: number) => {
+        this.readFromIndex(0, (line: string) => {
+            //This is hacky and could be much faster if it had dedicated method. but i dont care
+            if(!this.tailFromEnd) {
+                lineCb(line);
+            }
+        }, (index: number) => {
             eof(index);
 
             let currentIndex = index;

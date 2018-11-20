@@ -13,9 +13,9 @@ const FastTail = require("fasttail");
 
 const fastTail = new FastTail("test.txt");
 
-// Tail a file from the beginning
+// Tail a file from the end
 fastTail.tail((line: string) => {
-    // Every line of file
+    // new lines from tail
     // Watches for changes
 }, (index: number) => {
     // Optionally callback index of last line of file
@@ -32,3 +32,6 @@ fastTail.readFromIndex(10, (line: string) => {
 
 Change the poll rate
 `fastTail.pollRate = 200`
+
+Change tail to beginning of file
+`fastTail.tailFromEnd = false`
