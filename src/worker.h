@@ -6,8 +6,8 @@ using namespace Napi;
 
 class Worker : public AsyncWorker {
     public:
-        Worker(std::string logUri, int m_target, Napi::Function& lineCb)
-        : AsyncWorker(lineCb), logUri(logUri), m_target(m_target) {}
+        Worker(std::string logUri, int m_target, Napi::Function& lineCb, Napi::Function& eof)
+        : AsyncWorker(lineCb), logUri(logUri), m_target(m_target), eof(Napi::Persistent(eof)) {}
 
         void UsingMMap();
 
@@ -24,11 +24,14 @@ class Worker : public AsyncWorker {
         {
             Callback().Call({Napi::String::New(Env(), this->tails[i])});
         }
+
+        this->eof.Call({});
     }
 
     private:
         std::string logUri;
         int m_target;
         int currentIndex = 0;
+        Napi::FunctionReference eof;
         std::vector<std::string> tails;
 };

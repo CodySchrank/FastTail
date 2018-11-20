@@ -42,7 +42,7 @@ Napi::Value FastTail::Tail(const Napi::CallbackInfo &info)
 {
     Napi::Env env = info.Env();
 
-    if (info.Length() < 1)
+    if (info.Length() < 2)
     {
         Napi::TypeError::New(env, "Wrong number of arguments")
             .ThrowAsJavaScriptException();
@@ -56,9 +56,17 @@ Napi::Value FastTail::Tail(const Napi::CallbackInfo &info)
         return env.Null();
     }
 
-    Napi::Function lineCb = info[0].As<Napi::Function>();
+    if (!info[1].IsFunction())
+    {
+        Napi::TypeError::New(env, "Must pass in on line callback")
+            .ThrowAsJavaScriptException();
+        return env.Null();
+    }
 
-    Worker* wk = new Worker(this->logUri, 0, lineCb);
+    Napi::Function lineCb = info[0].As<Napi::Function>();
+    Napi::Function eof = info[1].As<Napi::Function>();
+
+    Worker* wk = new Worker(this->logUri, 0, lineCb, eof);
     wk->Queue();
 
     return env.Null();

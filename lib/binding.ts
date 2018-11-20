@@ -3,7 +3,7 @@ const addon = require('../build/Release/fasttail-native');
 interface IFastTailNative
 {
     getLogUri(): string;
-    tail(lineCb: (line: string) => void): void;
+    tail(lineCb: (line: string) => void, eof: () => void): void;
 };
 
 class FastTail {
@@ -15,8 +15,8 @@ class FastTail {
         return this._addonInstance.getLogUri();
     }
 
-    tail(lineCb: (line: string) => void) {
-        return this._addonInstance.tail(lineCb);
+    tail(lineCb: (line: string) => void, eof: () => void) {
+        return this._addonInstance.tail(lineCb, eof);
     }
 
     // private members
