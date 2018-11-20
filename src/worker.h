@@ -20,14 +20,15 @@ class Worker : public AsyncWorker {
     void OnOK() {
         HandleScope scope(Env());
 
-        ArrayBuffer buffer = ArrayBuffer::New(Env(), this->tails.data(), this->tails.size());
-
-        Callback().Call({buffer});
+        for (size_t i = 0; i < this->tails.size(); i++)
+        {
+            Callback().Call({Napi::String::New(Env(), this->tails[i])});
+        }
     }
 
     private:
         std::string logUri;
         int m_target;
         int currentIndex = 0;
-        std::vector<uint8_t> tails;
+        std::vector<std::string> tails;
 };

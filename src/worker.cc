@@ -39,14 +39,7 @@ void Worker::UsingMMap()
     //Tail file from last index
     while (curr != end)
     {
-        auto str = std::string(curr, next);
-        
-        for (size_t i = 0; i < str.length(); i++)
-        {
-            this->tails.push_back((int)str[i]);
-        }
-
-        this->tails.push_back(0);
+        this->tails.push_back(std::string(curr, next));
 
         curr = next + 1;
 
