@@ -1,7 +1,8 @@
 {
     "main": "lib/binding.js",
     "dependencies": {
-        "node-addon-api": "^1.1.0"
+        "node-addon-api": "^1.1.0",
+        "@types/node": "^7.0.22"
     },
     "scripts": {
         "pretest": "tsc",
@@ -9,7 +10,7 @@
     },
     "gypfile": true,
     "name": "fasttail",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Tail a file quickly",
     "author": "Cody Schrank",
     "license": "MIT",
