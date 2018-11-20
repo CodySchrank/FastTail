@@ -9,7 +9,7 @@
     },
     "gypfile": true,
     "name": "fasttail",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Tail a file quickly",
     "author": "Cody Schrank",
     "license": "MIT",
