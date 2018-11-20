@@ -1,24 +1,26 @@
 #include "worker.h"
 
-void Worker::UsingMMap(Napi::Env env, Napi::Function cb)
+void Worker::UsingMMap()
 {
+    this->tails.clear();
+
     int input = ::open(this->logUri.c_str(), O_RDONLY);
     if (input < 0) {
-        Napi::TypeError::New(env, "Could not open " + this->logUri)
+        Napi::TypeError::New(Env(), "Could not open " + this->logUri)
             .ThrowAsJavaScriptException();
         return;
     }
 
     struct ::stat infos;
     if (::fstat(input, &infos) != 0) {
-        Napi::TypeError::New(env, "Could not stat " + this->logUri)
+        Napi::TypeError::New(Env(), "Could not stat " + this->logUri)
             .ThrowAsJavaScriptException();
         return;
     }
 
     char *base = (char *)::mmap(NULL, infos.st_size, PROT_READ, MAP_PRIVATE, input, 0);
     if (base == MAP_FAILED) {
-        Napi::TypeError::New(env, "Could not map " + this->logUri)
+        Napi::TypeError::New(Env(), "Could not map " + this->logUri)
             .ThrowAsJavaScriptException();
         return;
     }
@@ -37,7 +39,15 @@ void Worker::UsingMMap(Napi::Env env, Napi::Function cb)
     //Tail file from last index
     while (curr != end)
     {
-        cb.MakeCallback(env.Global(), { Napi::String::New(env, std::string(curr, next))} );
+        auto str = std::string(curr, next);
+        
+        for (size_t i = 0; i < str.length(); i++)
+        {
+            this->tails.push_back((int)str[i]);
+        }
+
+        this->tails.push_back(0);
+
         curr = next + 1;
 
         if(int(*curr) != 0) {

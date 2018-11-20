@@ -5,12 +5,8 @@ let fastTail = new FastTail("test.txt");
 
 console.log(fastTail.getLogUri());
 
-console.log("HERE");
-
-fastTail.tail((line: string) => {
-    console.log(line);
-}, (eof: any) => {
-    console.log("Done!")
+fastTail.start((lines: string[]) => {
+    console.log(lines);
 })
 
-console.log("Done!");
+console.log("Async!");

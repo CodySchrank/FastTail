@@ -4,7 +4,7 @@ interface IFastTailNative
 {
     getLogUri(): string;
     tail(lineCb: Function): void;
-    tail(lineCb: Function, eofCb: Function): void;
+    start(lineCb: Function): void;
 };
 
 class FastTail {
@@ -16,8 +16,31 @@ class FastTail {
         return this._addonInstance.getLogUri();
     }
 
-    tail(lineCb: Function, eofCb: Function = () => {}) {
-        return this._addonInstance.tail(lineCb, eofCb);
+    tail(lineCb: Function) {
+        return this._addonInstance.tail(lineCb);
+    }
+
+    start(lineCb: Function) {
+        this.tail((buffer: ArrayBuffer) => {
+            let barr = new Uint8Array(buffer);
+            let lines: string[] = [];
+        
+            let line = "";
+        
+            for(let i = 0; i < barr.length; i++) {
+                let c = barr[i];
+        
+                if(c) {
+                    const char = String.fromCharCode(c);
+                    line += char;
+                } else {
+                    lines.push(line);
+                    line = "";
+                }
+            }
+        
+            lineCb(lines);
+        });
     }
 
     // private members
