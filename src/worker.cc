@@ -12,6 +12,7 @@ void Worker::UsingMMap()
     }
 
     struct ::stat infos;
+    //stat seg fault on empty file
     if (::fstat(input, &infos) != 0) {
         Napi::TypeError::New(Env(), "Could not stat " + this->logUri)
             .ThrowAsJavaScriptException();
@@ -43,7 +44,6 @@ void Worker::UsingMMap()
     //Tail file from last index
     while (curr != end)
     {
-        std::cout << curr << std::endl;
         //enter the loop empty
         if(int(*curr) == 0) {
             break;

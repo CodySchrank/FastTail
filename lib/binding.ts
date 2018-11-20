@@ -7,6 +7,8 @@ interface IFastTailNative
 };
 
 class FastTail {
+    public pollRate: number = 100;
+
     constructor(logUri: string) {
         this._addonInstance = new addon.FastTail(logUri)
     }
@@ -19,7 +21,7 @@ class FastTail {
         return this._addonInstance.tail(index, lineCb, eof);
     }
 
-    protected start(lineCb: (line: string) => void, eof: (index: number) => void) {
+    protected start(lineCb: (line: string) => void, eof: (index: number) => void = () => {}) {
         this.tail(0, lineCb, (index: number) => {
             eof(index);
 
@@ -35,7 +37,7 @@ class FastTail {
                         prevIndex = currentIndex;
                     }
                 });
-            }, 1000);
+            }, this.pollRate);
         })
     }
 

@@ -1,9 +1,2 @@
 Hello
 World
-Yup
-
-Today
-Is
-A
-Good
-Day
