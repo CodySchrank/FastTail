@@ -27,27 +27,36 @@ void Worker::UsingMMap()
 
     char const *end = base + infos.st_size;
     char const *curr = base;
+
     char const *next = std::find(curr, end, '\n');
 
     //Skip to target
     for (int count = this->m_target; count > 0 && curr != end; --count)
     {
         curr = next + 1;
+        if(int(*curr) == 0) {
+            break;
+        }
         next = std::find(curr, end, '\n');
     }
 
     //Tail file from last index
     while (curr != end)
     {
+        std::cout << curr << std::endl;
+        //enter the loop empty
+        if(int(*curr) == 0) {
+            break;
+        }
+
         this->tails.push_back(std::string(curr, next));
+        this->currentIndex++;
 
         curr = next + 1;
 
+        //next is not empty
         if(int(*curr) != 0) {
-            this->currentIndex++;
             next = std::find(curr, end, '\n');
-        } else {
-            break;
         }
     }
 

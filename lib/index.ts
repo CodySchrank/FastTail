@@ -1,18 +1,19 @@
 const FastTail = require("./binding");
 
 
-let fastTail = new FastTail("output_log.txt");
+let fastTail = new FastTail("test.txt");
 
 console.log(fastTail.getLogUri());
 const lines: string[] = [];
 
-console.time("s")
-
-fastTail.tail((line: string) => {
+fastTail.start((line: string) => {
     lines.push(line);
-}, () => {
-    console.log("EOF");
-    console.timeEnd("s");
+}, (index: number) => {
+    console.log(lines);
 })
 
 console.log("Async!");
+
+setTimeout(() => {
+    
+}, 10000000);
