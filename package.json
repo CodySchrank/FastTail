@@ -5,15 +5,14 @@
     },
     "scripts": {
         "pretest": "tsc",
-        "test": "node --napi-modules --no-warnings ./test/test_binding.js",
-        "start": "npm install && tsc && node --no-warnings dist/index.js"
+        "test": "node --napi-modules --no-warnings ./test/test_binding.js"
     },
     "gypfile": true,
     "name": "fasttail",
     "version": "1.0.0",
     "description": "Tail a file quickly",
-    "author": "",
-    "license": "ISC",
+    "author": "Cody Schrank",
+    "license": "MIT",
     "devDependencies": {
         "@types/node": "^7.0.22",
         "typescript": "^2.3.3"
