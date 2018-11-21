@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <fcntl.h>
+#include <regex>
 #include <chrono>
 #include <thread>
 

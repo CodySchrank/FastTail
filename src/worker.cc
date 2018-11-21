@@ -49,8 +49,13 @@ void Worker::UsingMMap()
             break;
         }
 
-        this->tails.push_back(std::string(curr, next));
-        this->currentIndex++;
+        std::regex e ("/[\n\r]+/g");
+        auto str = std::regex_replace(std::string(curr, next), e, "");
+
+        if(str != "") {
+            this->tails.push_back(std::string(curr, next));
+            this->currentIndex++;
+        }
 
         curr = next + 1;
 
