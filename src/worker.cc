@@ -53,7 +53,7 @@ void Worker::UsingMMap()
         auto str = std::regex_replace(std::string(curr, next), e, "");
 
         if(str != "") {
-            this->tails.push_back(std::string(curr, next));
+            this->tails.push_back(str);
             this->currentIndex++;
         }
 
