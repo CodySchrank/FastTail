@@ -35,3 +35,7 @@ Change the poll rate
 
 Change tail to beginning of file
 `fastTail.tailFromBeginning = true`
+
+## Notes
+
+This is native module so it requires the node.js runtime
