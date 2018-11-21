@@ -1,6 +1,6 @@
 {
     "name": "fasttail",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "Tail a file quickly",
     "repository": "https://github.com/CodySchrank/FastTail",
     "scripts": {
