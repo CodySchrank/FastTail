@@ -34,4 +34,4 @@ Change the poll rate
 `fastTail.pollRate = 200`
 
 Change tail to beginning of file
-`fastTail.tailFromEnd = false`
+`fastTail.tailFromBeginning = true`
