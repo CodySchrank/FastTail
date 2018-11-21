@@ -19,7 +19,7 @@ fastTail.tail((line: string) => {
     // Watches for changes
 }, (index: number) => {
     // Optionally callback index of last line of file
-    // Ie. Called once every time there is a change (including first pass)
+    // Ie. Called once every time there is a change and tail reaches end of file (including first pass)
 })
 
 // Or read a file from a certain index (does not watch for changes)
