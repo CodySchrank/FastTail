@@ -10,7 +10,7 @@ assert.strictEqual(fastTail.getLogUri(), "test.txt", "Unexpected value returned"
 fastTail.pollRate = 200;
 assert.strictEqual(fastTail.pollRate, 200, "Unexpected value returned");
 
-fastTail.tailFromEnd = false;
+fastTail.tailFromBeginning = true;
 
 const lines = [];
 let i = 0;
@@ -28,7 +28,6 @@ setTimeout(() => {
 
 setTimeout(() => {
     fastTail.readFromIndex(i, (line) => {
-        console.log(line);
         assert.strictEqual(line, "yup", "Unexpected value returned");
     }, () => {
         console.log("Tests passed- everything looks OK!");

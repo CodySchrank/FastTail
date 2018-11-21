@@ -20,7 +20,11 @@ class FastTail : public ObjectWrap<FastTail>
 public:
     FastTail(const CallbackInfo&);
     Napi::Value ReadFromIndex(const CallbackInfo&);
+    Napi::Value GetLastIndex(const CallbackInfo&);
     Napi::Value GetLogUri(const CallbackInfo&);
+
+    double UsingMapGetLastIndex();
+
     std::string logUri;
 
     static Function GetClass(Napi::Env);
