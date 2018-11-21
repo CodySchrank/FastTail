@@ -39,4 +39,5 @@ Change tail to beginning of file
 ## Notes
 
 This is native module so it requires the node.js runtime
+
 Uses memory mapping to quickly find index, so the entire file is loaded into memory for the first pass.
