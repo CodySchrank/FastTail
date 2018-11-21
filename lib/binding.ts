@@ -11,7 +11,7 @@ interface IFastTailNative
 
 class FastTail {
     public pollRate: number = 100;
-    public tailFromEnd = true;
+    public tailFromEnd: boolean = true;
 
     constructor(logUri: string) {
         this._addonInstance = new addon.FastTail(logUri)
