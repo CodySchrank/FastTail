@@ -6,8 +6,8 @@ interface IFastTailNative
     tailFromBeginning: boolean;
     getLogUri(): string;
     getLastIndex(): number;
-    readFromIndex(index: number, lineCb: (line: string) => void, eof: (index: number) => void): void;
-    tail(lineCb: (line: string) => void, eof: (index: number) => void): void;
+    readFromIndex(index: number, lineCb: (lines: string[], lastIndex: number) => void): void;
+    tailBlock(lineCb: (lines: string[], lastIndex: number) => void): void;
 };
 
 class FastTail {
@@ -26,23 +26,24 @@ class FastTail {
         return this._addonInstance.getLastIndex();
     }
 
-    public readFromIndex(index: number, lineCb: (line: string) => void, eof: (index: number) => void = () => {}) {
-        return this._addonInstance.readFromIndex(index, lineCb, eof);
+    public readFromIndex(index: number, lineCb: (lines: string[], lastIndex: number) => void) {
+        return this._addonInstance.readFromIndex(index, lineCb);
     }
 
-    protected tail(lineCb: (line: string) => void, eof: (index: number) => void = () => {}) {
+    public tailBlock(lineCb: (lines: string[], lastIndex: number) => void) {
         if(this.tailFromBeginning) {
-            this.readFromIndex(0, lineCb, (index: number) => {
-                eof(index);
+            this.readFromIndex(0, (lines, index) => {
+                lineCb(lines, index);
     
                 let currentIndex = index;
                 let prevIndex = currentIndex;
     
                 setInterval(() => {
-                    this.readFromIndex(currentIndex, lineCb, (newIndex) => {
+                    this.readFromIndex(currentIndex, (newLines, newIndex) => {
                         currentIndex = newIndex;
                         if(currentIndex != prevIndex) {
-                            eof(newIndex);
+                            lineCb(newLines, newIndex);
+
                             currentIndex = newIndex;
                             prevIndex = currentIndex;
                         }
@@ -51,14 +52,16 @@ class FastTail {
             })
         } else {
             let currentIndex = this.getLastIndex();
+
             currentIndex++;
             let prevIndex = currentIndex;
 
             setInterval(() => {
-                this.readFromIndex(currentIndex, lineCb, (newIndex) => {
+                this.readFromIndex(currentIndex, (lines, newIndex) => {
                     currentIndex = newIndex;
                     if(currentIndex != prevIndex) {
-                        eof(newIndex);
+                        lineCb(lines, newIndex);
+
                         currentIndex = newIndex;
                         prevIndex = currentIndex;
                     }
@@ -66,6 +69,43 @@ class FastTail {
             }, this.pollRate);
         }
     }
+
+    // protected tail(lineCb: (line: string) => void, eof: (index: number) => void = () => {}) {
+    //     if(this.tailFromBeginning) {
+    //         this.readFromIndex(0, lineCb, (index: number) => {
+    //             eof(index);
+    
+    //             let currentIndex = index;
+    //             let prevIndex = currentIndex;
+    
+    //             setInterval(() => {
+    //                 this.readFromIndex(currentIndex, lineCb, (newIndex) => {
+    //                     currentIndex = newIndex;
+    //                     if(currentIndex != prevIndex) {
+    //                         eof(newIndex);
+    //                         currentIndex = newIndex;
+    //                         prevIndex = currentIndex;
+    //                     }
+    //                 });
+    //             }, this.pollRate);
+    //         })
+    //     } else {
+    //         let currentIndex = this.getLastIndex();
+    //         currentIndex++;
+    //         let prevIndex = currentIndex;
+
+    //         setInterval(() => {
+    //             this.readFromIndex(currentIndex, lineCb, (newIndex) => {
+    //                 currentIndex = newIndex;
+    //                 if(currentIndex != prevIndex) {
+    //                     eof(newIndex);
+    //                     currentIndex = newIndex;
+    //                     prevIndex = currentIndex;xw
+    //                 }
+    //             });
+    //         }, this.pollRate);
+    //     }
+    // }
 
     // private members
     private _addonInstance: IFastTailNative;

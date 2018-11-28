@@ -98,7 +98,7 @@ Napi::Value FastTail::ReadFromIndex(const Napi::CallbackInfo &info)
 {
     Napi::Env env = info.Env();
 
-    if (info.Length() < 3)
+    if (info.Length() < 2)
     {
         Napi::TypeError::New(env, "Wrong number of arguments")
             .ThrowAsJavaScriptException();
@@ -119,18 +119,10 @@ Napi::Value FastTail::ReadFromIndex(const Napi::CallbackInfo &info)
         return env.Null();
     }
 
-    if (!info[2].IsFunction())
-    {
-        Napi::TypeError::New(env, "Must pass in eof callback")
-            .ThrowAsJavaScriptException();
-        return env.Null();
-    }
-
     double index = info[0].As<Napi::Number>().DoubleValue();
     Napi::Function lineCb = info[1].As<Napi::Function>();
-    Napi::Function eof = info[2].As<Napi::Function>();
 
-    Worker* wk = new Worker(this->logUri, index, lineCb, eof);
+    Worker* wk = new Worker(this->logUri, index, lineCb);
     wk->Queue();
 
     return env.Null();

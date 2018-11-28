@@ -14,13 +14,11 @@ const FastTail = require("fasttail");
 const fastTail = new FastTail("test.txt");
 
 // Tail a file from the end
-fastTail.tail((line: string) => {
+fastTail.tailBlock((lines: string[], index: number) => {
     // new lines from tail
+    // index of end of file line
     // Watches for changes
-}, (index: number) => {
-    // Optionally callback index of last line of file
-    // Ie. Called once every time there is a change and tail reaches end of file (including first pass)
-})
+});
 
 // Or read a file from a certain index (does not watch for changes)
 fastTail.readFromIndex(10, (line: string) => {
