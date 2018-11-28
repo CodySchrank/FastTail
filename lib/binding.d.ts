@@ -4,8 +4,8 @@ declare class FastTail {
     constructor(logUri: string);
     getLogUri(): string;
     getLastIndex(): number;
-    readFromIndex(index: number, lineCb: (line: string) => void, eof?: (index: number) => void): void;
-    protected tail(lineCb: (line: string) => void, eof?: (index: number) => void): void;
+    readFromIndex(index: number, lineCb: (lines: string[], lastIndex: number) => void): void;
+    tailBlock(lineCb: (lines: string[], lastIndex: number) => void): void;
     private _addonInstance;
 }
 export = FastTail;

@@ -12,24 +12,27 @@ assert.strictEqual(fastTail.pollRate, 200, "Unexpected value returned");
 
 fastTail.tailFromBeginning = true;
 
-const lines = [];
+let lines = [];
 let i = 0;
 
-fastTail.tail((line) => {
-    lines.push(line);
-}, (index) => {
-    assert.strictEqual(lines.length, index, "Unexpected value returned");
-    i = index;
-})
+fastTail.tailBlock((block, eof) => {
+    i = eof;
+    lines = lines.concat(block);
+    assert.strictEqual(lines[0], "Hello", "Unexpected value returned");
+    assert.strictEqual(lines[1], "World", "Unexpected value returned");
+});
 
 setTimeout(() => {
-    fs.appendFileSync('test.txt', '\nyup');
+    fs.appendFileSync('test.txt', 'yup');
 }, 200);
 
 setTimeout(() => {
-    fastTail.readFromIndex(i, (line) => {
-        assert.strictEqual(line, "yup", "Unexpected value returned");
-    }, () => {
-        console.log("Tests passed- everything looks OK!");
-    })
+    //read last value from file via index
+    fastTail.readFromIndex(--i, (block) => {
+        assert.strictEqual(block[0], "yup", "Unexpected value returned");
+    });
 }, 400);
+
+setTimeout(() => {
+    console.log("Test passed");
+}, 600);
